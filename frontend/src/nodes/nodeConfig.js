@@ -52,7 +52,7 @@ export const NODE_CONFIGS = {
     inputs: [],
     outputs: [{ id: 'output', label: 'Output' }],
     fields: [
-      { name: 'text', label: 'Text', type: 'textarea', placeholder: 'Enter text with {{variables}}' },
+      { name: 'text', label: 'Text', type: 'textarea', placeholder: 'Enter text with {{variables}}', defaultValue: '' },
     ],
   },
 

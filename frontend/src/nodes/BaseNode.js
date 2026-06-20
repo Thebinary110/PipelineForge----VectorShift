@@ -64,18 +64,19 @@ const ERROR_CARD_STYLE = {
  * Renders a single configurable form field.
  * Handles text inputs, selects, and textareas with focus-based border coloring.
  */
-const NodeField = ({ field, value, accentColor, onChange, textareaRef }) => {
+const NodeField = ({ field, value, accentColor, onChange, textareaRef, extraTopMargin }) => {
   const [focused, setFocused] = useState(false);
 
   const dynamicBorder = `1px solid ${focused ? accentColor : 'var(--border-default)'}`;
   const inputStyle = { ...INPUT_BASE, border: dynamicBorder };
+  const wrapStyle = extraTopMargin ? { ...FIELD_WRAPPER, marginTop: extraTopMargin } : FIELD_WRAPPER;
 
   if (field.type === 'select') {
     return (
-      <div style={FIELD_WRAPPER}>
+      <div style={wrapStyle}>
         <label style={LABEL_STYLE}>{field.label}</label>
         <select
-          value={value ?? field.defaultValue ?? ''}
+          value={value === undefined || value === null ? (field.defaultValue ?? '') : value}
           onChange={(e) => onChange(field.name, e.target.value)}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
@@ -91,7 +92,7 @@ const NodeField = ({ field, value, accentColor, onChange, textareaRef }) => {
 
   if (field.type === 'textarea') {
     return (
-      <div style={FIELD_WRAPPER}>
+      <div style={wrapStyle}>
         <label style={LABEL_STYLE}>{field.label}</label>
         <textarea
           ref={textareaRef}
@@ -108,7 +109,7 @@ const NodeField = ({ field, value, accentColor, onChange, textareaRef }) => {
   }
 
   return (
-    <div style={FIELD_WRAPPER}>
+    <div style={wrapStyle}>
       <label style={LABEL_STYLE}>{field.label}</label>
       <input
         type="text"
@@ -184,6 +185,7 @@ const textareaCallbackRef = useCallback((el) => {
 
   const handleFieldChange = useCallback(
     (fieldName, value) => {
+      console.log('fieldChange', fieldName, value, isDynamicMode);
       updateNodeField(id, fieldName, value);
 
       if (isDynamicMode && fieldName === 'text') {
@@ -218,6 +220,8 @@ const textareaCallbackRef = useCallback((el) => {
   const totalInputCount = staticInputCount + dynamicVarList.length;
   const outputCount = outputs.length;
 
+  console.log('detectedVars', detectedVars, isDynamicMode);
+
   try {
     return (
       <div
@@ -233,6 +237,7 @@ const textareaCallbackRef = useCallback((el) => {
           padding: 12,
           boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
           position: 'relative',
+          overflow: 'visible',
           transition: 'border-color 0.15s ease, width 0.1s ease',
           fontFamily: 'Inter, sans-serif',
         }}
@@ -267,13 +272,14 @@ const textareaCallbackRef = useCallback((el) => {
                 style={{
                   position: 'absolute',
                   top,
-                  left: 14,
+                  left: -58,
                   transform: 'translateY(-50%)',
                   fontSize: 9,
                   color: 'var(--text-secondary)',
                   pointerEvents: 'none',
                   userSelect: 'none',
                   letterSpacing: '0.02em',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 {varName}
@@ -330,7 +336,7 @@ const textareaCallbackRef = useCallback((el) => {
         </div>
 
         {/* ── Form fields ── */}
-        {fields.map((field) => (
+        {fields.map((field, index) => (
           <NodeField
             key={field.name}
             field={field}
@@ -339,6 +345,9 @@ const textareaCallbackRef = useCallback((el) => {
             onChange={handleFieldChange}
             textareaRef={
               field.type === 'textarea' && isDynamicMode ? textareaCallbackRef : undefined
+            }
+            extraTopMargin={
+              index === 0 && isDynamicMode && dynamicVarList.length > 0 ? 16 : undefined
             }
           />
         ))}
