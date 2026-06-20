@@ -164,6 +164,6 @@ Runs on `http://localhost:8000`. CORS is open to all origins for local developme
 
 | Layer | Technologies |
 |-------|-------------|
-| Frontend | React 18, ReactFlow 11, Zustand 5, Inter (Google Fonts) |
+| Frontend | React 18, ReactFlow 11, Zustand 5 --> downgraded to Zustand 4, Inter (Google Fonts) |
 | Backend | Python 3.9+, FastAPI, Pydantic v2 |
 | Tooling | Create React App, Uvicorn |
