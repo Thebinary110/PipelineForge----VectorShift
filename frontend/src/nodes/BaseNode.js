@@ -25,7 +25,7 @@ const handleDotStyle = (accentColor) => ({
 });
 
 const INPUT_BASE = {
-  background: '#0f0f0f',
+  background: 'var(--bg-canvas)',
   border: '1px solid var(--border-default)',
   borderRadius: 4,
   color: 'var(--text-primary)',
@@ -185,7 +185,7 @@ const textareaCallbackRef = useCallback((el) => {
 
   const handleFieldChange = useCallback(
     (fieldName, value) => {
-      console.log('fieldChange', fieldName, value, isDynamicMode);
+     // console.log('fieldChange', fieldName, value, isDynamicMode);
       updateNodeField(id, fieldName, value);
 
       if (isDynamicMode && fieldName === 'text') {
@@ -220,7 +220,7 @@ const textareaCallbackRef = useCallback((el) => {
   const totalInputCount = staticInputCount + dynamicVarList.length;
   const outputCount = outputs.length;
 
-  console.log('detectedVars', detectedVars, isDynamicMode);
+  // console.log('detectedVars', detectedVars, isDynamicMode);
 
   try {
     return (
