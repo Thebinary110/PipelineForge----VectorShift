@@ -9,11 +9,15 @@
 
 Built by Shhaurya Jaiswal (Thebinary110)
 
+![PipelineForge dark mode canvas — full pipeline with connected nodes](./assets/screenshots/canvas-dark.png)
+
 ---
 
 ## Overview
 
 PipelineForge is a node-based visual pipeline editor inspired by LangFlow and n8n, built as a VectorShift frontend technical assessment. It provides a drag-and-drop canvas where users compose AI workflows by connecting 9 configurable node types — including LLM, API Call, Prompt Template, and Transform nodes. A FastAPI backend validates the constructed graph in real time, running a DFS-based DAG check and returning node count, edge count, and cycle detection results through a custom analysis modal.
+
+![PipelineForge light mode — theme toggle in action](./assets/screenshots/canvas-light.png)
 
 ---
 
@@ -110,6 +114,8 @@ All unique variable names captured in group 1 are deduplicated with a `Set` and 
 
 The textarea auto-resizes on each change by setting `height: 'auto'` then `height: scrollHeight + 'px'`. Node width expands proportionally to the longest line (`charCount * 7px`), clamped between 220 px and 480 px.
 
+![Text node with {{name}} and {{topic}} variables generating dynamic left-side handles](./assets/screenshots/text-node-variables.png)
+
 ### DAG Validation
 
 The backend runs a 3-color DFS on the submitted graph:
@@ -125,6 +131,8 @@ A back edge (neighbor with color `1`) indicates a cycle. The algorithm iterates 
 ```
 
 The frontend displays results in a dark card modal with backdrop blur — no `window.alert`.
+
+![Pipeline analysis modal showing node count, edge count, and DAG validation result](./assets/screenshots/analysis-modal.png)
 
 ---
 
