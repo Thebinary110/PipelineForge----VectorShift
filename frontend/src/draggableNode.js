@@ -1,15 +1,19 @@
 /**
  * draggableNode.js
  * Toolbar chip for dragging node types onto the canvas.
- * Derives accent color from nodeConfig to stay in sync with node appearance.
+ * Derives accent color from nodeConfig. Hover state managed via local state
+ * because inline styles cannot target CSS pseudo-classes.
  */
 
+import { useState } from 'react';
 import { NODE_CONFIGS } from './nodes/nodeConfig';
 
 export const DraggableNode = ({ type, label }) => {
   const accentColor = NODE_CONFIGS[type]?.accentColor || '#888888';
+  const [hovered, setHovered] = useState(false);
 
   const onDragStart = (event) => {
+    event.currentTarget.style.opacity = '0.6';
     event.dataTransfer.setData(
       'application/reactflow',
       JSON.stringify({ nodeType: type })
@@ -21,29 +25,26 @@ export const DraggableNode = ({ type, label }) => {
     event.currentTarget.style.opacity = '1';
   };
 
-  const onDragStartWithOpacity = (event) => {
-    event.currentTarget.style.opacity = '0.7';
-    onDragStart(event);
-  };
-
   return (
     <div
       draggable
-      onDragStart={onDragStartWithOpacity}
+      onDragStart={onDragStart}
       onDragEnd={onDragEnd}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
       style={{
         cursor: 'grab',
         display: 'flex',
         alignItems: 'center',
-        gap: 7,
-        padding: '5px 11px',
+        gap: 6,
+        height: 28,
+        padding: '0 10px',
         borderRadius: 6,
-        background: 'var(--bg-node)',
-        border: '1px solid var(--border-default)',
-        borderLeft: `3px solid ${accentColor}`,
+        background: hovered ? 'var(--bg-node)' : 'transparent',
+        border: `1px solid ${hovered ? 'var(--border-hover)' : 'var(--border-default)'}`,
         userSelect: 'none',
         flexShrink: 0,
-        transition: 'border-color 0.15s ease, opacity 0.15s ease',
+        transition: 'background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease',
       }}
     >
       <span
@@ -58,10 +59,11 @@ export const DraggableNode = ({ type, label }) => {
       />
       <span
         style={{
-          fontSize: 12,
+          fontSize: 11,
           color: 'var(--text-primary)',
           fontFamily: 'Inter, sans-serif',
           whiteSpace: 'nowrap',
+          letterSpacing: '0.01em',
         }}
       >
         {label}

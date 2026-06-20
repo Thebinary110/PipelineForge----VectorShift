@@ -98,7 +98,12 @@ export const PipelineUI = () => {
         snapGrid={[20, 20]}
         connectionLineType="smoothstep"
       >
-        <Background variant="dots" color="#2a2a2a" gap={20} />
+        <Background
+          variant="dots"
+          gap={16}
+          size={1.5}
+          color="var(--dot-color)"
+        />
         <Controls />
         <MiniMap
           nodeColor={miniMapNodeColor}

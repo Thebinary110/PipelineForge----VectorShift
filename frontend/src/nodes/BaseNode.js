@@ -235,10 +235,12 @@ const textareaCallbackRef = useCallback((el) => {
           minWidth: 220,
           width: isDynamicMode ? nodeWidth : undefined,
           padding: 12,
-          boxShadow: '0 4px 24px rgba(0,0,0,0.4)',
+          boxShadow: isHovered
+            ? `0 0 0 1px ${accentColor}26, var(--shadow-node)`
+            : 'var(--shadow-node)',
           position: 'relative',
           overflow: 'visible',
-          transition: 'border-color 0.15s ease, width 0.1s ease',
+          transition: 'border-color 0.15s ease, box-shadow 0.15s ease, width 0.1s ease',
           fontFamily: 'Inter, sans-serif',
         }}
       >

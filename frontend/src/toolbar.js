@@ -1,9 +1,10 @@
 /**
  * toolbar.js
- * Pipeline builder toolbar — VectorShift wordmark on the left, all 9 draggable node chips on the right.
+ * Pipeline builder toolbar — PipelineForge wordmark, node type palette, and theme toggle.
  */
 
 import { DraggableNode } from './draggableNode';
+import { useTheme } from './ThemeContext';
 
 const NODE_LIST = [
   { type: 'customInput',    label: 'Input' },
@@ -17,44 +18,93 @@ const NODE_LIST = [
   { type: 'transform',      label: 'Transform' },
 ];
 
-export const PipelineToolbar = () => (
-  <div
-    style={{
-      height: 64,
-      background: 'var(--bg-toolbar)',
-      borderBottom: '1px solid var(--border-default)',
-      display: 'flex',
-      alignItems: 'center',
-      padding: '0 20px',
-      gap: 20,
-      overflow: 'hidden',
-    }}
-  >
-    <span
-      style={{
-        color: '#ffffff',
-        fontWeight: 700,
-        fontSize: 16,
-        fontFamily: 'Inter, sans-serif',
-        flexShrink: 0,
-        letterSpacing: '-0.02em',
-      }}
-    >
-      VectorShift
-    </span>
+export const PipelineToolbar = () => {
+  const { theme, toggleTheme } = useTheme();
 
+  return (
     <div
       style={{
+        height: 52,
+        background: 'var(--bg-toolbar)',
+        borderBottom: '1px solid var(--border-default)',
         display: 'flex',
-        gap: 8,
-        overflowX: 'auto',
-        flex: 1,
-        paddingBottom: 1,
+        alignItems: 'center',
+        padding: '0 20px',
+        flexShrink: 0,
       }}
     >
-      {NODE_LIST.map(({ type, label }) => (
-        <DraggableNode key={type} type={type} label={label} />
-      ))}
+      {/* Wordmark */}
+      <span
+        style={{
+          fontSize: 14,
+          fontWeight: 700,
+          color: 'var(--text-primary)',
+          fontFamily: 'Inter, sans-serif',
+          letterSpacing: '-0.02em',
+          flexShrink: 0,
+          marginRight: 16,
+        }}
+      >
+        PipelineForge
+      </span>
+
+      {/* Vertical divider */}
+      <div
+        style={{
+          width: 1,
+          height: 20,
+          background: 'var(--border-default)',
+          flexShrink: 0,
+          marginRight: 16,
+        }}
+      />
+
+      {/* Scrollable node chip row */}
+      <div
+        style={{
+          display: 'flex',
+          gap: 6,
+          overflowX: 'auto',
+          flex: 1,
+          alignItems: 'center',
+          paddingBottom: 1,
+        }}
+      >
+        {NODE_LIST.map(({ type, label }) => (
+          <DraggableNode key={type} type={type} label={label} />
+        ))}
+      </div>
+
+      {/* Theme toggle */}
+      <button
+        onClick={toggleTheme}
+        style={{
+          marginLeft: 'auto',
+          flexShrink: 0,
+          background: 'transparent',
+          border: '1px solid var(--border-default)',
+          borderRadius: 6,
+          color: 'var(--text-primary)',
+          padding: '4px 12px',
+          fontSize: 12,
+          cursor: 'pointer',
+          fontFamily: 'Inter, sans-serif',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          transition: 'border-color 0.15s ease, background 0.15s ease',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = 'var(--bg-node)';
+          e.currentTarget.style.borderColor = 'var(--border-hover)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = 'transparent';
+          e.currentTarget.style.borderColor = 'var(--border-default)';
+        }}
+      >
+        {theme === 'dark' ? '☀ Light' : '☾ Dark'}
+      </button>
     </div>
-  </div>
-);
+  );
+};
